@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reztroid® - Garansi & Bonus Management Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              purple: '#6d4df6',
+              purpleDark: '#5635e8',
+              lime: '#bdf529',
+              lightPurple: '#f4f0ff',
+              pillPurple: '#ece5ff',
+              pillText: '#6845f5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #f7f9fc; }
+    .hero-gradient {
+      background: linear-gradient(135deg, #7451f8 0%, #5d36f5 60%, #4b23e8 100%);
+      box-shadow: 0 20px 40px -15px rgba(109, 77, 246, 0.45);
+    }
+    .neon-btn {
+      background-color: #bef724;
+      color: #0d0f12;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .neon-btn:hover {
+      background-color: #abeb0c;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px -4px rgba(190, 247, 36, 0.5);
+    }
+    .drop-active {
+      border-color: #bef724 !important;
+      background-color: rgba(109, 77, 246, 0.08) !important;
+      transform: scale(1.01);
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-800 antialiased min-h-screen pb-16">
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-5">
+    
+    <!-- Top Header -->
+    <header class="bg-white rounded-2xl px-5 py-3.5 mb-5 flex items-center justify-between shadow-sm border border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-purple flex items-center justify-center text-white font-black text-xl shadow-md shadow-brand-purple/30">R</div>
+        <div class="flex items-center gap-2">
+          <span class="text-xl font-extrabold text-slate-900 tracking-tight">reztroid<span class="text-xs text-slate-400 font-normal ml-0.5">®</span></span>
+          <span class="bg-brand-pillPurple text-brand-pillText text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider uppercase">ADMIN DASHBOARD</span>
+        </div>
+      </div>
+      <button onclick="handleRefresh()" class="flex items-center gap-1.5 bg-white border border-slate-200 text-slate-600 hover:text-slate-900 font-semibold text-xs px-3.5 py-2 rounded-xl transition shadow-xs">
+        🔄 Refresh
+      </button>
+    </header>
+
+    <!-- Main Hero Banner -->
+    <div class="hero-gradient rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden mb-5">
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md border border-white/25 px-3 py-1 rounded-full text-xs font-semibold text-white/95 mb-4">
+        <span>🛡️</span>
+        <span class="tracking-wide uppercase text-[11px]">MANAJEMEN GARANSI & BONUS</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight mb-2">
+        Pantau Garansi, Pengingat &amp; Bonus Aktif.
+      </h1>
+      <p class="text-xs sm:text-sm text-purple-100/90 max-w-xl mb-6 font-normal">
+        Tersedia fitur Drag-and-Drop &amp; Quick Paste untuk auto-input laporan customer tanpa input manual satu per satu.
+      </p>
+
+      <button onclick="openModal()" class="w-full neon-btn font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 mb-6 cursor-pointer">
+        <span class="text-lg leading-none">+</span>
+        <span>Tambah Manual Garansi / Bonus</span>
+      </button>
+
+      <!-- Metrics Summary Sub-card -->
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/20 grid grid-cols-2 sm:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-white/15">
+        <div class="pt-2 sm:pt-0">
+          <p class="text-[10px] uppercase font-bold tracking-wider text-purple-200 mb-1">DALAM PROSES</p>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statInProcess" class="text-xl sm:text-2xl font-black text-white">0</span>
+            <span class="text-[11px] text-purple-200">Klaim</span>
+          </div>
+        </div>
+        <div class="pt-2 sm:pt-0 sm:pl-4">
+          <p class="text-[10px] uppercase font-bold tracking-wider text-amber-200 mb-1">PERLU TINDAKAN</p>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statUrgent" class="text-xl sm:text-2xl font-black text-amber-300">0</span>
+            <span class="text-[11px] text-amber-100">Klaim</span>
+          </div>
+        </div>
+        <div class="pt-2 sm:pt-0 sm:pl-4">
+          <p class="text-[10px] uppercase font-bold tracking-wider text-lime-200 mb-1">TOTAL BONUS</p>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statBonusCount" class="text-xl sm:text-2xl font-black text-[#bef724]">0</span>
+            <span class="text-[11px] text-lime-200">Customer</span>
+          </div>
+        </div>
+        <div class="pt-2 sm:pt-0 sm:pl-4">
+          <p class="text-[10px] uppercase font-bold tracking-wider text-purple-200 mb-1">SELESAI</p>
+          <div class="flex items-baseline gap-1.5">
+            <span id="statDone" class="text-xl sm:text-2xl font-black text-white">0</span>
+            <span class="text-[11px] text-purple-200">Klaim</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAGIC DRAG & DROP ZONE (AREA PENERIMA SALINAN OTOMATIS) -->
+    <div id="dropZone" class="mb-7 bg-white rounded-3xl p-5 border-2 border-dashed border-brand-purple/40 hover:border-brand-purple transition-all duration-200 shadow-xs cursor-pointer flex flex-col items-center justify-center text-center space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-purple-50 text-brand-purple flex items-center justify-center text-2xl font-black">
+        📥
+      </div>
+      <div>
+        <h3 class="font-extrabold text-sm sm:text-base text-slate-800">
+          Drop atau Paste Teks Laporan ke Sini!
+        </h3>
+        <p class="text-xs text-slate-400 mt-0.5 max-w-md">
+          Tarik (drag) teks format dari chat customer ke kotak ini, atau cukup tekan <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-[10px] text-slate-700">Ctrl + V</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-[10px] text-slate-700">Cmd + V</kbd>. Data otomatis terpecah dan tersimpan!
+        </p>
+      </div>
+    </div>
+
+    <!-- Section Reminder Tab -->
+    <div class="mb-7">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight">Daftar Pengingat</h2>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+            <span>Perlu Diingatkan:</span>
+            <span id="activeReminderCountBadge" class="bg-purple-100 text-brand-purple font-bold px-2 py-0.5 rounded-full text-xs">0</span>
+            <span>Pelanggan</span>
+          </div>
+        </div>
+
+        <div class="flex bg-slate-200/60 p-1 rounded-xl text-xs font-bold gap-1 self-start sm:self-auto">
+          <button id="remTabWarrantyBtn" onclick="switchReminderTab('warranty')" class="px-3 py-1.5 rounded-lg bg-white text-brand-purple shadow-xs transition flex items-center gap-1.5">
+            <span>🛡️ Garansi (H-1)</span>
+            <span id="wCount" class="bg-purple-100 text-brand-purple px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+          </button>
+          <button id="remTabBonusBtn" onclick="switchReminderTab('bonus')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+            <span>🎁 Bonus Jatuh Tempo</span>
+            <span id="bCount" class="bg-slate-300/70 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="warrantyReminderContainer" class="space-y-3"></div>
+      <div id="bonusReminderContainer" class="space-y-3 hidden"></div>
+    </div>
+
+    <!-- Section List -->
+    <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+        <div>
+          <h3 class="font-extrabold text-slate-900 text-base">Semua Catatan Garansi & Bonus</h3>
+          <p class="text-xs text-slate-400">Pilih status untuk filter atau cari nama pelanggan.</p>
+        </div>
+        <div class="relative w-full md:w-64">
+          <input type="text" id="searchInput" oninput="renderData()" placeholder="Cari nama atau produk..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 pl-9 text-xs text-slate-800 focus:outline-none focus:border-brand-purple">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-3 mb-4 text-xs font-semibold">
+        <button onclick="setTabFilter('ALL')" id="tab-ALL" class="tab-btn px-3 py-1.5 rounded-xl transition bg-slate-900 text-white whitespace-nowrap">Semua Status</button>
+        <button onclick="setTabFilter('PROSES')" id="tab-PROSES" class="tab-btn px-3 py-1.5 rounded-xl transition bg-slate-100 text-slate-600 whitespace-nowrap">⏳ Dalam Proses</button>
+        <button onclick="setTabFilter('MENUNGGU')" id="tab-MENUNGGU" class="tab-btn px-3 py-1.5 rounded-xl transition bg-slate-100 text-slate-600 whitespace-nowrap">📦 Menunggu Data</button>
+        <button onclick="setTabFilter('BONUS')" id="tab-BONUS" class="tab-btn px-3 py-1.5 rounded-xl transition bg-slate-100 text-slate-600 whitespace-nowrap">🎁 Dapat Bonus</button>
+        <button onclick="setTabFilter('SELESAI')" id="tab-SELESAI" class="tab-btn px-3 py-1.5 rounded-xl transition bg-slate-100 text-slate-600 whitespace-nowrap">✅ Selesai</button>
+      </div>
+
+      <div id="dataCardList" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- Modal Manual -->
+  <div id="modalOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div>
+          <h4 class="font-black text-slate-900 text-lg">Input Garansi & Bonus</h4>
+          <p class="text-xs text-slate-400">Tambahkan informasi klaim dan reminder bonus.</p>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 font-bold">✕</button>
+      </div>
+
+      <form id="addForm" onsubmit="handleFormSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nama Customer <span class="text-rose-500">*</span></label>
+          <input type="text" id="inputName" required placeholder="Contoh: Andi Pratama" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:border-brand-purple outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / No HP <span class="text-rose-500">*</span></label>
+            <input type="text" id="inputPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:border-brand-purple outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Produk / Layanan <span class="text-rose-500">*</span></label>
+            <input type="text" id="inputProduct" required placeholder="Contoh: Netflix 1 Bulan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:border-brand-purple outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Status Garansi</label>
+            <select id="inputStatus" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold focus:border-brand-purple outline-none">
+              <option value="Dalam Proses">⏳ Dalam Proses</option>
+              <option value="Menunggu Data/Akun">📦 Menunggu Data / Akun</option>
+              <option value="Selesai">✅ Selesai</option>
+              <option value="Tidak Ada Klaim">➖ Tanpa Garansi</option>
+              <option value="Ditolak">❌ Ditolak / Hangus</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Target Selesai Garansi</label>
+            <input type="date" id="inputDueDate" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-medium focus:border-brand-purple outline-none">
+          </div>
+        </div>
+
+        <!-- Bonus -->
+        <div class="bg-purple-50/70 border border-purple-100 rounded-2xl p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🎁</span>
+              <div>
+                <p class="text-xs font-bold text-slate-800">Dapat Bonus Customer?</p>
+                <p class="text-[11px] text-slate-500">Berikan kompensasi atau bonus loyalitas</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="inputHasBonus" onchange="toggleBonusField()" class="sr-only peer">
+              <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-purple"></div>
+            </label>
+          </div>
+
+          <div id="bonusDetailContainer" class="hidden pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-brand-purpleDark mb-1">Rincian Bonus</label>
+              <input type="text" id="inputBonusDetail" placeholder="Misal: Tambah +3 Hari Aktif" class="w-full bg-white border border-purple-200 rounded-xl px-3 py-1.5 text-xs focus:border-brand-purple outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-brand-purpleDark mb-1">Batas Expired Bonus</label>
+              <input type="date" id="inputBonusDeadline" class="w-full bg-white border border-purple-200 rounded-xl px-3 py-1.5 text-xs focus:border-brand-purple outline-none">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Kendala</label>
+          <textarea id="inputNotes" rows="2" placeholder="Catatan perbaikan / nomor invoice" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:border-brand-purple outline-none"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full neon-btn font-extrabold text-xs sm:text-sm py-3 rounded-xl shadow-md flex items-center justify-center gap-2">
+            <span>Simpan Data</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 transition-all transform translate-y-20 opacity-0 pointer-events-none">
+    <span id="toastMsg">Data berhasil disimpan</span>
+  </div>
+
+  <script>
+    let items = JSON.parse(localStorage.getItem('reztroid_garansi_records')) || [];
+    let currentTab = 'ALL';
+    let currentReminderTab = 'warranty';
+
+    function getFormattedDateOffset(offset) {
+      const d = new Date();
+      d.setDate(d.getDate() + offset);
+      return d.toISOString().split('T')[0];
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    function saveState() {
+      localStorage.setItem('reztroid_garansi_records', JSON.stringify(items));
+      calculateMetrics();
+      renderReminders();
+      renderData();
+    }
+
+    function handleRefresh() {
+      showToast("🔄 Data dashboard diperbarui");
+      calculateMetrics();
+      renderReminders();
+      renderData();
+    }
+
+    // ==========================================
+    // SMART PARSER: AUTO MEMECAH TEXT DARI DRAG / PASTE
+    // ==========================================
+    function parseAndAddText(rawText) {
+      if (!rawText || rawText.trim().length === 0) return;
+
+      let name = "";
+      let phone = "";
+      let product = "";
+      let notes = "";
+
+      const lines = rawText.split('\n');
+      for (let line of lines) {
+        const lower = line.toLowerCase();
+        if (lower.startsWith('nama:')) {
+          name = line.substring(5).trim();
+        } else if (lower.startsWith('no hp:') || lower.startsWith('hp:') || lower.startsWith('wa:') || lower.startsWith('whatsapp:')) {
+          phone = line.split(':')[1]?.trim() || "";
+        } else if (lower.startsWith('produk:') || lower.startsWith('layanan:')) {
+          product = line.split(':')[1]?.trim() || "";
+        } else if (lower.startsWith('kendala:') || lower.startsWith('catatan:') || lower.startsWith('detail:')) {
+          notes = line.split(':')[1]?.trim() || "";
+        }
+      }
+
+      // Jika teks bebas / bukan format standar, ambil tebakan terbaik
+      if (!name && lines.length > 0) name = lines[0].replace(/[^a-zA-Z0-9\s]/g, '').trim();
+      if (!phone) {
+        const phoneMatch = rawText.match(/(08\d{8,12}|628\d{8,12})/);
+        if (phoneMatch) phone = phoneMatch[0];
+      }
+      if (!product) product = "Layanan Akun";
+      if (!notes) notes = rawText.slice(0, 100);
+
+      const newItem = {
+        id: Date.now(),
+        name: name || "Customer Baru",
+        phone: phone || "-",
+        product: product,
+        status: "Dalam Proses",
+        dueDate: getFormattedDateOffset(1), // Target otomatis H-1 (besok)
+        hasBonus: false,
+        bonusDetail: "",
+        bonusDeadline: "",
+        notes: notes || "Laporan masuk via drag/paste"
+      };
+
+      items.unshift(newItem);
+      saveState();
+      showToast(`⚡ Berhasil Auto-Input: ${newItem.name}!`);
+    }
+
+    // Setup Event Drag-and-Drop & Paste Global
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drop-active');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drop-active');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drop-active');
+      const text = e.dataTransfer.getData('text');
+      if (text) {
+        parseAndAddText(text);
+      }
+    });
+
+    // Fitur Quick Paste (Ctrl+V / Cmd+V) di mana saja pada dashboard
+    window.addEventListener('paste', (e) => {
+      // Jangan trigger jika admin sedang mengetik di input form biasa
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+      const pasted = (e.clipboardData || window.clipboardData).getData('text');
+      if (pasted) {
+        parseAndAddText(pasted);
+      }
+    });
+
+    // ==========================================
+    // UI MODAL & CRUD STANDAR
+    // ==========================================
+    function openModal() {
+      document.getElementById('modalOverlay').classList.remove('hidden');
+      document.getElementById('modalOverlay').classList.add('flex');
+      document.getElementById('inputDueDate').value = getFormattedDateOffset(0);
+      document.getElementById('inputBonusDeadline').value = getFormattedDateOffset(3);
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.add('hidden');
+      document.getElementById('modalOverlay').classList.remove('flex');
+      document.getElementById('addForm').reset();
+      document.getElementById('bonusDetailContainer').classList.add('hidden');
+    }
+
+    function toggleBonusField() {
+      const isChecked = document.getElementById('inputHasBonus').checked;
+      const box = document.getElementById('bonusDetailContainer');
+      if (isChecked) {
+        box.classList.remove('hidden');
+        box.classList.add('grid');
+        document.getElementById('inputBonusDetail').focus();
+      } else {
+        box.classList.add('hidden');
+        box.classList.remove('grid');
+        document.getElementById('inputBonusDetail').value = '';
+        document.getElementById('inputBonusDeadline').value = '';
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const hasBonus = document.getElementById('inputHasBonus').checked;
+      const newItem = {
+        id: Date.now(),
+        name: document.getElementById('inputName').value.trim(),
+        phone: document.getElementById('inputPhone').value.trim(),
+        product: document.getElementById('inputProduct').value.trim(),
+        status: document.getElementById('inputStatus').value,
+        dueDate: document.getElementById('inputDueDate').value,
+        hasBonus: hasBonus,
+        bonusDetail: hasBonus ? (document.getElementById('inputBonusDetail').value.trim() || "Bonus Loyalitas") : "",
+        bonusDeadline: hasBonus ? document.getElementById('inputBonusDeadline').value : "",
+        notes: document.getElementById('inputNotes').value.trim() || "-"
+      };
+
+      items.unshift(newItem);
+      saveState();
+      closeModal();
+      showToast("✅ Berhasil menambahkan data!");
+    }
+
+    function updateItemStatus(id, newStatus) {
+      items = items.map(item => item.id === id ? { ...item, status: newStatus } : item);
+      saveState();
+      showToast("Status garansi diupdate");
+    }
+
+    function deleteItem(id) {
+      const item = items.find(i => i.id === id);
+      if (item && confirm(`Hapus catatan: ${item.name}?`)) {
+        items = items.filter(i => i.id !== id);
+        saveState();
+        showToast("🗑️ Data dihapus");
+      }
+    }
+
+    function formatPhone(phone) {
+      let clean = String(phone).replace(/[^0-9]/g, '');
+      if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+      return clean;
+    }
+
+    function sendWarrantyWA(id) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      const text = `Halo Kak *${encodeURIComponent(item.name)}*, salam dari *reztroid*! 👋%0A%0AUpdate status klaim garansi untuk produk *${encodeURIComponent(item.product)}*:%0AStatus: *${encodeURIComponent(item.status)}*%0ACatatan: ${encodeURIComponent(item.notes)}%0A%0AInfo lebih lanjut bisa langsung balas chat ini ya kak! 🙏`;
+      window.open(`https://wa.me/${formatPhone(item.phone)}?text=${text}`, '_blank');
+    }
+
+    function sendBonusWA(id) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      const text = `Halo Kak *${encodeURIComponent(item.name)}*, kabar baik dari *reztroid*! 🎁%0A%0AKamu berhak klaim bonus pesanan *${encodeURIComponent(item.product)}*:%0A✨ *${encodeURIComponent(item.bonusDetail)}*%0A${item.bonusDeadline ? `Batas Klaim/Aktif: *${encodeURIComponent(item.bonusDeadline)}*%0A` : ''}%0ASilakan balas pesan ini ya kak untuk menggunakan bonusnya. Terima kasih! ❤️`;
+      window.open(`https://wa.me/${formatPhone(item.phone)}?text=${text}`, '_blank');
+    }
+
+    function switchReminderTab(type) {
+      currentReminderTab = type;
+      const wBtn = document.getElementById('remTabWarrantyBtn');
+      const bBtn = document.getElementById('remTabBonusBtn');
+      const wContainer = document.getElementById('warrantyReminderContainer');
+      const bContainer = document.getElementById('bonusReminderContainer');
+
+      if (type === 'warranty') {
+        wBtn.className = "px-3 py-1.5 rounded-lg bg-white text-brand-purple shadow-xs transition flex items-center gap-1.5";
+        bBtn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+        wContainer.classList.remove('hidden');
+        bContainer.classList.add('hidden');
+      } else {
+        bBtn.className = "px-3 py-1.5 rounded-lg bg-white text-brand-purple shadow-xs transition flex items-center gap-1.5";
+        wBtn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
+        bContainer.classList.remove('hidden');
+        wContainer.classList.add('hidden');
+      }
+      renderReminders();
+    }
+
+    function calculateMetrics() {
+      const inProcess = items.filter(i => i.status === 'Dalam Proses').length;
+      const done = items.filter(i => i.status === 'Selesai').length;
+      const bonusCount = items.filter(i => i.hasBonus).length;
+      const today = getFormattedDateOffset(0);
+      const urgent = items.filter(i => (i.status === 'Dalam Proses' || i.status === 'Menunggu Data/Akun') && i.dueDate && i.dueDate <= today).length;
+
+      document.getElementById('statInProcess').innerText = inProcess;
+      document.getElementById('statUrgent').innerText = urgent;
+      document.getElementById('statBonusCount').innerText = bonusCount;
+      document.getElementById('statDone').innerText = done;
+    }
+
+    function renderReminders() {
+      const today = getFormattedDateOffset(0);
+      const tomorrow = getFormattedDateOffset(1);
+
+      const warrantyReminders = items.filter(i => {
+        const isNotDone = i.status !== 'Selesai' && i.status !== 'Ditolak' && i.status !== 'Tidak Ada
