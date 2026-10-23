@@ -1,47 +1,278 @@
-<!-- Top Banner Card (Re-designed) -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#7052ff] via-[#5c3bf5] to-[#4623e9] p-6 sm:p-9 text-white shadow-xl shadow-indigo-500/20">
-      
-      <!-- Ambient Glow Orbs -->
-      <div class="pointer-events-none absolute -right-12 -bottom-12 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute top-0 right-1/4 h-32 w-32 rounded-full bg-[#bef724]/20 blur-2xl"></div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pusat Klaim Garansi - reztroid®</title>
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Confetti Canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-      <!-- Content Container -->
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        
-        <!-- Left Side: Brand & Headings -->
-        <div class="space-y-3 max-w-2xl">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center font-black text-white text-xl shadow-inner">
-              R
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-2xl tracking-tight text-white">reztroid<span class="text-xs text-white/60 ml-0.5">®</span></span>
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#bef724] animate-pulse"></span>
-                Official Helpdesk
-              </span>
-            </div>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            brand: {
+              purple: '#6d4df6',
+              purpleDark: '#5635e8',
+              lime: '#bef724',
+              pillPurple: '#ece5ff',
+              pillText: '#6845f5'
+            }
+          },
+          animation: {
+            'pop-in': 'popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'float': 'float 3s ease-in-out infinite'
+          },
+          keyframes: {
+            popIn: {
+              '0%': { transform: 'scale(0.95)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-6px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #f7f9fc; }
+    .hero-gradient {
+      background: linear-gradient(135deg, #7451f8 0%, #5d36f5 60%, #4b23e8 100%);
+      box-shadow: 0 20px 40px -15px rgba(109, 77, 246, 0.45);
+    }
+    .neon-btn {
+      background-color: #bef724;
+      color: #0d0f12;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .neon-btn:hover {
+      background-color: #abeb0c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -2px rgba(190, 247, 36, 0.55);
+    }
+    .neon-btn:active { transform: translateY(0); }
+
+    .chip-active {
+      background-color: #6d4df6 !important;
+      color: #ffffff !important;
+      border-color: #5635e8 !important;
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(109, 77, 246, 0.25);
+    }
+    .ticket-pattern {
+      background-image: radial-gradient(#e0e7ff 1.2px, transparent 1.2px);
+      background-size: 14px 14px;
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-800 antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8 selection:bg-brand-purple selection:text-white">
+
+  <!-- Container Melebar proporsional (max-w-6xl) -->
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Top Banner Card (Lebar Penuh) -->
+    <div class="hero-gradient rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl">
+      <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute top-6 right-8 text-5xl animate-float pointer-events-none opacity-80 hidden sm:block">🛡️</div>
+
+      <div class="relative z-10 space-y-2 max-w-3xl">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-black text-white text-lg shadow-sm">
+            R
           </div>
-
-          <h1 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight pt-1">
-            Layanan Klaim & Kendala Akun
-          </h1>
-          <p class="text-xs sm:text-sm text-purple-100/90 leading-relaxed font-normal">
-            Ada gangguan pada akun langgananmu? Isi form kendala di bawah. Tiket digital otomatis terbuat dan siap diproses admin.
-          </p>
+          <span class="font-extrabold text-xl tracking-tight">reztroid<span class="text-xs text-white/70 ml-0.5">®</span></span>
+          <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider ml-2">
+            PUSAT GARANSI
+          </span>
         </div>
 
-        <!-- Right Side: Mini Stats Badge Box -->
-        <div class="flex md:flex-col items-center md:items-end justify-between gap-3 pt-2 md:pt-0 border-t md:border-t-0 border-white/10 shrink-0">
-          <div class="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-2xl shadow-sm">
-            <span class="text-base">🛡️</span>
-            <div class="text-left">
-              <div class="text-[9px] uppercase tracking-wider text-purple-200 font-bold">Status Layanan</div>
-              <div class="text-xs font-black text-[#bef724]">GARANSI AKTIF 24/7</div>
-            </div>
-          </div>
-          <span class="text-[11px] font-medium text-purple-200/80">⚡ Respon Cepat Sesuai Antrean</span>
-        </div>
-
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
+          Layanan Klaim & Kendala Akun
+        </h1>
+        <p class="text-xs sm:text-sm text-purple-100/90 leading-relaxed font-medium">
+          Ada gangguan pada akun langgananmu? Isi data kendala di kolom kiri. Tiket laporan digitalmu otomatis dibuat secara real-time di kolom kanan dan siap dikirim ke admin WhatsApp!
+        </p>
       </div>
     </div>
+
+    <!-- Layout 2 Kolom di Desktop (Split Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- KOLOM KIRI: FORMULIR INPUT (7 Kolom) -->
+      <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-100 space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <span>📝</span> Masukkan Data Kendala
+          </h2>
+          <span class="text-[11px] font-bold text-brand-purple bg-purple-50 px-2.5 py-0.5 rounded-full">Langkah 1</span>
+        </div>
+
+        <form id="claimForm" class="space-y-4 text-xs sm:text-sm">
+          
+          <!-- Nama & WA -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Nama Lengkap / Username</label>
+              <input type="text" id="custName" oninput="handleInputChange()" required placeholder="Contoh: Ryan Pratama" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Nomor WhatsApp Aktif</label>
+              <input type="text" id="custPhone" oninput="handleInputChange()" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
+            </div>
+          </div>
+
+          <!-- Quick Chips Produk -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">Pilih Produk / Layanan</label>
+            <div class="flex flex-wrap gap-1.5 mb-2.5">
+              <button type="button" onclick="selectProductChip(this, 'Netflix 1P 4K')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">🎬 Netflix</button>
+              <button type="button" onclick="selectProductChip(this, 'Spotify Family')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">🎧 Spotify</button>
+              <button type="button" onclick="selectProductChip(this, 'Canva Pro')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">🎨 Canva Pro</button>
+              <button type="button" onclick="selectProductChip(this, 'YouTube Premium')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">▶️ YouTube</button>
+              <button type="button" onclick="selectProductChip(this, 'CapCut Pro')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">✂️ CapCut</button>
+              <button type="button" onclick="selectProductChip(this, 'Lainnya')" class="prod-chip px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-bold transition hover:border-brand-purple">Lainnya...</button>
+            </div>
+            <input type="text" id="custProduct" oninput="handleInputChange()" required placeholder="Atau ketik nama produk jika tidak ada di tombol pilihan..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
+          </div>
+
+          <!-- Email / Akun -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">Email / Profil Akun yang Bermasalah</label>
+            <input type="text" id="custAccount" oninput="handleInputChange()" placeholder="Contoh: ryan@gmail.com / Profil No. 3" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
+          </div>
+
+          <!-- Quick Chips Kendala -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">Jenis Kendala yang Terjadi</label>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <button type="button" onclick="appendIssue('Password salah / logout')" class="px-2.5 py-1 rounded-lg bg-purple-50 text-brand-purple border border-purple-100 text-[11px] font-bold hover:bg-purple-100 transition">🔑 Password Berubah</button>
+              <button type="button" onclick="appendIssue('Batas layar penuh (screen limit)')" class="px-2.5 py-1 rounded-lg bg-purple-50 text-brand-purple border border-purple-100 text-[11px] font-bold hover:bg-purple-100 transition">📺 Layar Penuh</button>
+              <button type="button" onclick="appendIssue('Link invite member expired')" class="px-2.5 py-1 rounded-lg bg-purple-50 text-brand-purple border border-purple-100 text-[11px] font-bold hover:bg-purple-100 transition">✉️ Link Expired</button>
+              <button type="button" onclick="appendIssue('Akun turun ke free / premium hilang')" class="px-2.5 py-1 rounded-lg bg-purple-50 text-brand-purple border border-purple-100 text-[11px] font-bold hover:bg-purple-100 transition">📉 Premium Hilang</button>
+            </div>
+            <textarea id="custNotes" oninput="handleInputChange()" required rows="3" placeholder="Tuliskan kendala lainnya secara rinci..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition"></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- KOLOM KANAN: LIVE TICKET PREVIEW & ACTION (5 Kolom - Sticky Melayang) -->
+      <div class="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <span>🎫</span> Tiket Garansi Digital
+            </h2>
+            <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Update
+            </span>
+          </div>
+
+          <!-- Tiket Visual -->
+          <div class="ticket-pattern bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden border border-slate-700/60">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🛡️</span>
+                <span class="text-xs font-black tracking-wider text-[#bef724]">GARANSI REZTROID</span>
+              </div>
+              <span id="ticketDate" class="text-[11px] font-mono text-slate-400">Hari ini</span>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between items-start gap-2">
+                <span class="text-slate-400 shrink-0">Customer:</span>
+                <span id="previewName" class="font-bold text-white text-right truncate">-</span>
+              </div>
+              <div class="flex justify-between items-start gap-2">
+                <span class="text-slate-400 shrink-0">WhatsApp:</span>
+                <span id="previewPhone" class="font-mono text-white text-right">-</span>
+              </div>
+              <div class="flex justify-between items-start gap-2">
+                <span class="text-slate-400 shrink-0">Produk:</span>
+                <span id="previewProduct" class="font-bold text-purple-300 text-right truncate">-</span>
+              </div>
+              <div class="border-t border-white/10 pt-2.5 mt-2">
+                <span class="text-slate-400 block mb-1">Detail Masalah:</span>
+                <p id="previewNotes" class="italic text-slate-200 bg-white/5 p-2.5 rounded-xl border border-white/5 text-[11px] leading-relaxed max-h-24 overflow-y-auto">
+                  Silakan lengkapi formulir di samping...
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tombol Kirim WhatsApp & Salin -->
+          <div class="space-y-2.5 pt-1">
+            <button type="button" onclick="sendToAdminWA()" class="w-full neon-btn font-black text-sm py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                <path d="M12.031 2C6.495 2 2 6.492 2 12.028c0 1.944.555 3.766 1.516 5.308L2 22l4.82-1.469a9.98 9.98 0 005.211 1.497h.004c5.536 0 10.031-4.492 10.031-10.028 0-2.678-1.043-5.197-2.937-7.091A9.972 9.972 0 0012.031 2zm0 18.258h-.003a8.27 8.27 0 01-4.223-1.156l-.303-.18-3.138.958.976-3.056-.197-.314a8.275 8.275 0 01-1.272-4.482c0-4.568 3.717-8.285 8.288-8.285 2.213 0 4.293.863 5.858 2.428a8.232 8.232 0 012.425 5.857c0 4.568-3.717 8.285-8.286 8.285z"/>
+              </svg>
+              <span>Kirim Tiket ke WhatsApp Admin</span>
+            </button>
+
+            <button type="button" onclick="copyFormattedText()" id="copyBtn" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 transition">
+              <span>📄 Salin Teks Format Saja</span>
+            </button>
+          </div>
+
+          <p class="text-[11px] text-center text-slate-400 leading-tight">
+            Setelah klik tombol di atas, chat WhatsApp akan otomatis terbuka dan admin akan segera memproses antrean klaim.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // ==============================================================
+    // GANTI NOMOR DI BAWAH DENGAN NOMOR WA TOKO REZTROID MILIKMU:
+    // (Awali dengan 62 tanpa spasi atau tanda plus, contoh: 6281299961001)
+    // ==============================================================
+    const ADMIN_WA_NUMBER = "6281299961001";
+
+    function playTone(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.1);
+        } else if (type === 'success') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    function selectProductChip(btn, productName) {
+      playTone('click');
+      document.querySelectorAll('.prod-chip').forEach(b => b.classList.remove('chip-active'));
+      btn.classList.add('chip-active');
+
+      const prodInput = document.getElementById('custProduct');
