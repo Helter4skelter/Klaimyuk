@@ -3,37 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulir Klaim Garansi - reztroid®</title>
-  <!-- Font Inter -->
+  <title>reztroid® - Garansi & Bonus Management Dashboard</title>
+  
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Canvas Confetti Library untuk Selebrasi -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
           colors: {
             brand: {
               purple: '#6d4df6',
               purpleDark: '#5635e8',
               lime: '#bef724',
+              limeHover: '#a7e31b',
+              lightPurple: '#f4f0ff',
               pillPurple: '#ece5ff',
               pillText: '#6845f5'
+            }
+          },
+          animation: {
+            'bounce-short': 'bounceShort 0.5s ease-in-out 1',
+            'pulse-glow': 'pulseGlow 2s infinite',
+          },
+          keyframes: {
+            bounceShort: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-6px)' }
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+              '50%': { opacity: '1', transform: 'scale(1.03)' }
             }
           }
         }
       }
     }
   </script>
+
   <style>
     body { background-color: #f7f9fc; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
     .hero-gradient {
       background: linear-gradient(135deg, #7451f8 0%, #5d36f5 60%, #4b23e8 100%);
-      box-shadow: 0 16px 32px -10px rgba(109, 77, 246, 0.4);
+      box-shadow: 0 20px 40px -15px rgba(109, 77, 246, 0.45);
     }
+
     .neon-btn {
       background-color: #bef724;
       color: #0d0f12;
@@ -41,122 +70,26 @@
     }
     .neon-btn:hover {
       background-color: #abeb0c;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px -2px rgba(190, 247, 36, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px -4px rgba(190, 247, 36, 0.5);
     }
-    .neon-btn:active {
-      transform: translateY(0);
+    .neon-btn:active { transform: translateY(0); }
+
+    .drop-active {
+      border-color: #bef724 !important;
+      background: rgba(109, 77, 246, 0.08) !important;
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(190, 247, 36, 0.35) !important;
+    }
+
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.08);
+      border-color: #c7d2fe;
     }
   </style>
 </head>
-<body class="font-sans text-slate-800 antialiased min-h-screen py-8 px-4 sm:px-6">
-
-  <div class="max-w-xl mx-auto space-y-5">
-    
-    <!-- Top Brand Header -->
-    <div class="hero-gradient rounded-3xl p-6 sm:p-7 text-white relative overflow-hidden shadow-lg">
-      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-
-      <div class="flex items-center gap-2.5 mb-3">
-        <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-black text-white text-base">
-          R
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-extrabold text-lg tracking-tight">reztroid<span class="text-xs text-white/70 ml-0.5 font-normal">®</span></span>
-          <span class="bg-white/20 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-            HELP DESK
-          </span>
-        </div>
-      </div>
-
-      <h1 class="text-xl sm:text-2xl font-black tracking-tight leading-snug">Form Laporan Garansi Akun</h1>
-      <p class="text-xs text-purple-100/90 mt-1 leading-relaxed">
-        Lengkapi formulir di bawah. Format tiket klaim otomatis dibuat dan bisa langsung dikirim ke WhatsApp admin untuk diproses.
-      </p>
-    </div>
-
-    <!-- Step 1: Input Formulir -->
-    <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h2 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <span>📝</span> 1. Masukkan Detail Kendala
-        </h2>
-        <span class="text-[11px] font-medium text-slate-400">Semua kolom wajib diisi</span>
-      </div>
-
-      <form id="claimForm" oninput="updateLivePreview()" class="space-y-3.5 text-xs sm:text-sm">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Lengkap / Username</label>
-          <input type="text" id="custName" required placeholder="Contoh: Ryan Pratama" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp Aktif</label>
-            <input type="text" id="custPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Produk / Layanan</label>
-            <input type="text" id="custProduct" required placeholder="Contoh: Netflix 1P 4K / Canva Pro" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Email / Profil Akun yang Terkendala</label>
-          <input type="text" id="custAccount" placeholder="Contoh: akunreztroid@gmail.com / Profil 2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition">
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Detail Masalah</label>
-          <textarea id="custNotes" required rows="3" placeholder="Sebutkan kendalanya secara lengkap (misal: password berubah, batas layar, link invite expired)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:border-brand-purple focus:bg-white outline-none transition"></textarea>
-        </div>
-      </form>
-    </div>
-
-    <!-- Step 2: Format Preview Siap Kirim -->
-    <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h2 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <span>📋</span> 2. Format Laporan yang Terbentuk
-        </h2>
-        <span class="text-[11px] font-bold text-brand-purple bg-purple-50 px-2 py-0.5 rounded-full">Otomatis Terisi</span>
-      </div>
-
-      <!-- Tampilan Box Format Teks -->
-      <div class="relative bg-slate-900 rounded-2xl p-4 text-slate-100 font-mono text-xs leading-relaxed overflow-x-auto shadow-inner border border-slate-800">
-        <pre id="previewText" class="whitespace-pre-wrap select-all font-mono">Lengkapi formulir di atas untuk melihat format klaim...</pre>
-      </div>
-
-      <!-- Tombol Aksi Customer -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-        <button type="button" onclick="sendToAdminWA()" class="neon-btn font-extrabold py-3.5 px-4 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer order-1 sm:order-2">
-          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
-            <path d="M12.031 2C6.495 2 2 6.492 2 12.028c0 1.944.555 3.766 1.516 5.308L2 22l4.82-1.469a9.98 9.98 0 005.211 1.497h.004c5.536 0 10.031-4.492 10.031-10.028 0-2.678-1.043-5.197-2.937-7.091A9.972 9.972 0 0012.031 2zm0 18.258h-.003a8.27 8.27 0 01-4.223-1.156l-.303-.18-3.138.958.976-3.056-.197-.314a8.275 8.275 0 01-1.272-4.482c0-4.568 3.717-8.285 8.288-8.285 2.213 0 4.293.863 5.858 2.428a8.232 8.232 0 012.425 5.857c0 4.568-3.717 8.285-8.286 8.285z"/>
-          </svg>
-          <span>Kirim ke WhatsApp Admin</span>
-        </button>
-
-        <button type="button" onclick="copyFormattedText()" id="copyBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-1.5 transition order-2 sm:order-1">
-          <span>📄 Salin Teks Format</span>
-        </button>
-      </div>
-
-      <p class="text-[11px] text-center text-slate-400">
-        Setelah klik <em>"Kirim ke WhatsApp Admin"</em>, pesan otomatis dikirimkan ke kontak admin reztroid.
-      </p>
-    </div>
-
-  </div>
-
-  <script>
-    // ==============================================================
-    // GANTI NOMOR DI BAWAH DENGAN NOMOR WHATSAPP TOKO REZTROID KAMU:
-    // (Awali dengan 62 tanpa spasi atau strip, contoh: 6281299961001)
-    // ==============================================================
-    const ADMIN_WHATSAPP_NUMBER = "6281299961001";
-
-    function getFormattedText() {
-      const name = document.getElementById('custName').value.trim() || "[Nama Customer]";
-      const phone = document.getElementById('custPhone').value.trim() || "[Nomor HP]";
-      const product = document.getElementById('custProduct').value.trim() || "[Nama Produk]";
-      const account = document
+<body class="font-sans text-slate-800 antialiased min-h-screen pb-2
